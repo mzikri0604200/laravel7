@@ -13,25 +13,28 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-
-Route::get('/', 'HomeController@index');
-
 Route::view('/about', 'about'); // view('url', 'page')
 Route::view('/contact', 'contact'); 
 Route::view('/login', 'login'); 
 
 // Route::get('posts/{slug}', 'PostController@show');
-Route::get('posts', 'PostController@index');
 
-Route::get('posts/create', 'PostController@create');
-Route::post('posts/store', 'PostController@store');
+Route::get('posts', 'PostController@index')->name('posts.index'); 
+Route::prefix('posts')->middleware('auth')->group(function ()
+{
+	// Route::get('posts', 'PostController@index')->name('posts.index')->withoutMiddleware('auth'); 
+	Route::get('create', 'PostController@create')->name('posts.create');
+	Route::post('store', 'PostController@store');
+	
+	Route::get('{post:slug}/edit', 'PostController@edit');
+	Route::patch('{post:slug}/edit', 'PostController@update');
+	
+	Route::delete('{post:slug}/delete', 'PostController@destroy');
+	Route::get('{post:slug}', 'PostController@show')->withoutMiddleware('auth');
+});
 
-Route::get('posts/{post:slug}/edit', 'PostController@edit');
-Route::patch('posts/{post:slug}/edit', 'PostController@update');
-
-Route::delete('posts/{post:slug}/delete', 'PostController@destroy');
-
-Route::get('posts/{post:slug}', 'PostController@show');
+// Route::get('posts/create', 'PostController@create')->middleware('auth')->name('posts.create');
+// Route::get('posts/{post:slug}', 'PostController@show');
 
 Route::get('categories/{category:slug}', 'CategoryController@show');
 
@@ -40,3 +43,7 @@ Route::get('tags/{tag:slug}', 'TagController@show');
 
 // Route::get('posts/{category:name}/{post:slug}', 'PostController@show');
 
+
+Auth::routes();
+
+Route::get('/', 'HomeController@index')->name('home');

@@ -21,7 +21,11 @@
 					@endif
 				</div>
 				<div class="col-6 text-right">
-					<a href="/posts/create" class="btn btn-primary">Create Post</a>
+					@if (Auth::check())
+						<a href="{{ route('posts.create') }}" class="btn btn-primary">Create Post</a>
+					@else
+						<a href="{{ route('login') }}" class="btn btn-success">Login to create new post</a>
+					@endif
 				</div>
 			</div>
 			<div class="row">
@@ -49,7 +53,9 @@
 											Published on {{$post->created_at->format("d F, Y")}}
 										</div>
 										<div class="col-auto align-self-center">
-											<a href="/posts/{{$post->slug}}/edit" class="btn btn-sm btn-info">Edit</a>
+											@auth
+												<a href="/posts/{{$post->slug}}/edit" class="btn btn-sm btn-info">Edit</a>
+											@endauth
 										</div>
 									</div>
 								</div>
