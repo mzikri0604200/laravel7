@@ -40,6 +40,8 @@
                               {{ __('Logout') }}
                           </a>
 
+                          <a class="dropdown-item text-info" href="{{ route('posts.create') }}"> Create Post </a>
+
                           <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
                               @csrf
                           </form>

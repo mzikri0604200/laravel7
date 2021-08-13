@@ -16,10 +16,10 @@ class Post extends Model
         return $this->belongsTo(Category::class);
     }
 
-    // public function takeImage()
-    // {
-    //     return "/storage/" . $this->thumbnail;
-    // }
+    public function takeImage()
+    {
+        return "/storage/" . $this->thumbnail;
+    }
 
     public function getTakeImageAttribute()
     {

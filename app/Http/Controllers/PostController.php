@@ -28,7 +28,7 @@ class PostController extends Controller
 
         return view('posts.index',[
             // 'posts' => Post::paginate(3),
-            'posts' => Post::latest()->paginate(3),
+            'posts' => Post::latest()->paginate(4),
         ]);
 
     }
@@ -158,10 +158,18 @@ class PostController extends Controller
 
     public function destroy(Post $post)
     {
+        // menghapus post sesuai user
+        $this->authorize('delete', $post);
+
         // Delete asset Storage img 
         \Storage::delete($post->thumbnail);
 
-        $this->authorize('delete', $post);
+        // Delete tags
+        $post->tags()->detach();
+
+        // Delete Post
+        $post->delete();
+
 
         // Alert
         session()->flash('error', 'The post was deleted');
