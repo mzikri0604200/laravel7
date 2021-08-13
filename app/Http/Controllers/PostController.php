@@ -77,6 +77,8 @@ class PostController extends Controller
         // $post['slug'] = Str::slug($request->title);
         // Post::create($post);
 
+        $thumbnail = request()->file('thumbnail');
+
         $attr = $request->validate([
             'title' => 'required|min:3',
             'body' => 'required',
@@ -88,8 +90,12 @@ class PostController extends Controller
 
         $attr['category_id'] = request('category');
 
-        $post = Post::create($attr);
-        
+        // $attr['user_id'] = auth()->id();
+
+
+        // $post = Post::create($attr);
+        $post = auth()->user()->posts()->create($attr);
+
         $post->tags()->attach(request('tags')); 
 
         // session()->flash('error', 'the post was not created');
@@ -111,6 +117,8 @@ class PostController extends Controller
 
     public function update(Post $post, Request $request)
     {
+
+        $this->authorize('update', $post);
         $attr = $this->validateRequest();
         $attr['category_id'] = request('category');
 
@@ -125,12 +133,21 @@ class PostController extends Controller
 
     public function destroy(Post $post)
     {
-        $post->tags()->detach();
-        $post->delete();
 
-        session()->flash('success', 'The post was Deleted');
-
+        $this->authorize('delete', $post);
+        session()->flash('error', 'The post was deleted');
         return redirect('posts');
+
+
+        // if (auth()->user()->is($post->author)) {
+        //     $post->tags()->detach();
+        //     $post->delete();
+        //     session()->flash('success', 'The post was Deleted');
+        //     return redirect('posts');
+        // } else {
+        //     session()->flash('error', "It wasn't your post");
+        //     return redirect('posts');
+        // }        
     }
 
     public function validateRequest()

@@ -24,11 +24,13 @@
         </div>
         <div class="row">
             <div class="col-12">
-
-                @auth
+                <p class="text-info">
+                    Wrote By : {{$post->author->name}}
+                </p>
+                @can('delete', $post)
                     <!-- Button trigger modal -->
                     <button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#exampleModal">
-                    Delete
+                     Delete
                     </button>
 
                     <!-- Modal -->
@@ -58,7 +60,7 @@
                             </div>
                         </div>
                     </div>
-                @endauth
+                @endcan
             </div>
         </div>
 

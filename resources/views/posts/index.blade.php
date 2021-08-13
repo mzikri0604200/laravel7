@@ -53,9 +53,17 @@
 											Published on {{$post->created_at->format("d F, Y")}}
 										</div>
 										<div class="col-auto align-self-center">
-											@auth
+											{{-- @auth
 												<a href="/posts/{{$post->slug}}/edit" class="btn btn-sm btn-info">Edit</a>
-											@endauth
+											@endauth --}}
+
+											{{-- @if (auth()->user()->is($post->author))
+												<a href="/posts/{{$post->slug}}/edit" class="btn btn-sm btn-info">Edit</a>
+											@endif --}}
+
+											@can ('update', $post)
+												<a href="/posts/{{$post->slug}}/edit" class="btn btn-sm btn-info">Edit</a>
+											@endcan
 										</div>
 									</div>
 								</div>
