@@ -8,12 +8,22 @@ class Post extends Model
 {
     // protected $table = 'posts';
 
-    protected $fillable = ['category_id', 'title', 'slug', 'body'];
+    protected $fillable = ['category_id', 'title', 'slug', 'body', 'thumbnail'];
 
     public function category()
     {
         // return $this->belongsTo(Category::class, 'subject');
         return $this->belongsTo(Category::class);
+    }
+
+    // public function takeImage()
+    // {
+    //     return "/storage/" . $this->thumbnail;
+    // }
+
+    public function getTakeImageAttribute()
+    {
+        return "/storage/" . $this->thumbnail;
     }
 
     public function tags()

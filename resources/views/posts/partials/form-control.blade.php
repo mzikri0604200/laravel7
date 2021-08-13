@@ -1,5 +1,11 @@
 <div class="form-group">
-	<input type="file" name="thumbnail" id="thumbnail">
+	<label for="thumbnail">Thumbnail</label>
+	<input type="file" name="thumbnail" id="thumbnail" class="form-control-file @error('thumbnail') is-invalid @enderror">
+	@error('thumbnail')
+	<div class="invalid-feedback">
+		{{ $message }}
+	</div>
+	@enderror
 </div>
 <div class="form-group">
 	<label for="title">Title</label>

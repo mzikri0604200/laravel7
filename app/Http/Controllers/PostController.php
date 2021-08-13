@@ -77,21 +77,33 @@ class PostController extends Controller
         // $post['slug'] = Str::slug($request->title);
         // Post::create($post);
 
-        $thumbnail = request()->file('thumbnail');
-
         $attr = $request->validate([
             'title' => 'required|min:3',
             'body' => 'required',
             'category' => 'required',
             'tags' => 'array|required',
+            'thumbnail' => 'image|mimes:jpeg,png,jpg,svg|max:2048',
         ]);
 
-        $attr['slug'] = Str::slug($request->title);
+        $slug = Str::slug($request->title);
+        $attr['slug'] = $slug;
+
+        if (request()->file('thumbnail')) {
+            $thumbnail = request()->file('thumbnail');
+            // $thumbnailUrl = $thumbnail->storeAs("images/posts", "{$slug}.{$thumbnail->extension()}");
+            $thumbnailUrl = $thumbnail->store("images/posts");
+        } else {
+            $thumbnailUrl = NULL;
+        }
+
+        // $thumbnail = request()->file('thumbnail');
+        // // $thumbnailUrl = $thumbnail->storeAs("images/posts", "{$slug}.{$thumbnail->extension()}");
+        // $thumbnailUrl = $thumbnail->store("images/posts");
 
         $attr['category_id'] = request('category');
+        $attr['thumbnail'] = $thumbnailUrl;
 
         // $attr['user_id'] = auth()->id();
-
 
         // $post = Post::create($attr);
         $post = auth()->user()->posts()->create($attr);
@@ -117,10 +129,23 @@ class PostController extends Controller
 
     public function update(Post $post, Request $request)
     {
-
         $this->authorize('update', $post);
+
+        // replace asset in folder storage 
+        if (request()->file('thumbnail')) {
+            \Storage::delete($post->thumbnail);
+            $thumbnail = request()->file('thumbnail')->store("images/posts");
+        } else {
+            $thumbnail = $post->thumbnail;
+        }
+
+        // $thumbnail = request()->file('thumbnail');
+        // $thumbnailUrl = $thumbnail->store("images/posts");
+
         $attr = $this->validateRequest();
         $attr['category_id'] = request('category');
+
+        $attr['thumbnail'] = $thumbnail;
 
         $post->update($attr);
         $post->tags()->sync(request('tags'));
@@ -133,8 +158,12 @@ class PostController extends Controller
 
     public function destroy(Post $post)
     {
+        // Delete asset Storage img 
+        \Storage::delete($post->thumbnail);
 
         $this->authorize('delete', $post);
+
+        // Alert
         session()->flash('error', 'The post was deleted');
         return redirect('posts');
 
@@ -157,6 +186,7 @@ class PostController extends Controller
             'body' => 'required',
             'category' => 'required',
             'tags' => 'array|required',
+            'thumbnail' => 'image|mimes:jpeg,png,jpg,svg|max:2048',
         ]);
     }
     

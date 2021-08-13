@@ -35,11 +35,18 @@
 					@foreach ($posts as $post)
 						<div class="col-lg-4 mb-3">
 							<div class="card">
-								<div class="card-header">
-									{{$post->title}}
-								</div>
+								@if ($post->thumbnail)
+									<img src="{{ $post->takeImage }}" class="card-img-top" style="height: 270px;object-fit:cover;">
+									{{-- <img src="{{ asset($post->takeImage()) }}" class="card-img-top" style="height: 270px;object-fit:cover;"> --}}
+									{{-- <img src="{{ asset('/storage/' . $post->thumbnail) }}" class="card-img-top" style="height: 270px;object-fit:cover;"> --}}
+								@else
+									<img src="{{ asset("/storage/images/posts/notfound.jpg") }}" class="card-img-top" style="height: 270px;object-fit:cover;">
+								@endif
 								<div class="card-body">
-									<p>
+									<h5 class="card-title font-weight-bold">
+										{{$post->title}}
+									</h5>
+									<p class="card-text">
 										{{-- {{$post->body}} --}}
 										{{Str::limit($post->body, 100)}}
 										{{-- {{Str::limit($post->body, 100, '.')}} --}}
