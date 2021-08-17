@@ -10,13 +10,18 @@
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
           <!-- Left Side Of Navbar -->
           <ul class="navbar-nav mr-auto">
-            <li class="nav-item">
-              <a href="{{ route('posts.index') }}" class="nav-link">Posts</a>
-            </li>
-          </ul>
+            <form method="GET" action="{{ route('search.posts') }}" class="form-inline my-2 my-lg-0">
+                <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" name="query">
+                <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+            </form>
+        </ul>
+        
+        <!-- Right Side Of Navbar -->
+        <ul class="navbar-nav ml-auto">
+              <li class="nav-item">
+                <a href="{{ route('posts.index') }}" class="nav-link">Posts</a>
+              </li>
 
-          <!-- Right Side Of Navbar -->
-          <ul class="navbar-nav ml-auto">
               <!-- Authentication Links -->
               @guest
                   <li class="nav-item">

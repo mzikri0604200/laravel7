@@ -20,6 +20,7 @@ Route::view('/login', 'login');
 // Route::get('posts/{slug}', 'PostController@show');
 
 Route::get('posts', 'PostController@index')->name('posts.index'); 
+Route::get('search', 'SearchController@post')->name('search.posts'); 
 Route::prefix('posts')->middleware('auth')->group(function ()
 {
 	// Route::get('posts', 'PostController@index')->name('posts.index')->withoutMiddleware('auth'); 

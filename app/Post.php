@@ -9,6 +9,7 @@ class Post extends Model
     // protected $table = 'posts';
 
     protected $fillable = ['category_id', 'title', 'slug', 'body', 'thumbnail'];
+    protected $with = ['author', 'category', 'tags'];
 
     public function category()
     {
