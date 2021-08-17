@@ -2,24 +2,23 @@
 
 @section('content')
 		<div class="container">
-			<div class="row mb-2">
-				<div class="col-lg-6 col-12 ">
+			{{-- <div class="row mb-2">
+				<div class="col-lg-8">
 					@isset($category)
-						<h4>
-							Category : {{$category->name}}
-						</h4>
+						<h4>Category : {{$category->name}}</h4>
 					@endisset
 					
 					@isset($tag)
-						<h4>
-							Tag : {{ $tag->name }}
-						</h4>
+						<h4>Tag : {{ $tag->name}}</h4>
 					@endisset
 
 					@if (!isset($tag) && !isset($category))
 						<h4>All Post</h4>
 					@endif
 				</div>
+				<div class="col-lg-4">
+					<h4>Category</h4>
+				</div> --}}
 				{{-- <div class="col-lg-6 col-12  text-right">
 					@if (Auth::check())
 						<a href="{{ route('posts.create') }}" class="btn btn-primary">Create Post</a>
@@ -27,13 +26,27 @@
 						<a href="{{ route('login') }}" class="btn btn-success">Login to create new post</a>
 					@endif
 				</div> --}}
-			</div>
+			{{-- </div> --}}
 			
 			<div class="row">
-				@if ($posts->count())
-					<div class="col-lg-8 mb-3">
+				<div class="col-lg-8">
+					<div class="mb-3">
+						@isset($category)
+							<h4>Category : {{$category->name}}</h4>
+						@endisset
+						
+						@isset($tag)
+							<h4>Tag : {{ $tag->name}}</h4>
+						@endisset
+	
+						@if (!isset($tag) && !isset($category))
+							<h4>All Post</h4>
+						@endif
+					</div>
+
+					@if ($posts->count())
 						@foreach ($posts as $post)
-						<div class="card shadow">
+						<div class="card shadow mb-3">
 
 							{{-- == Thumbnail == --}}
 							@if ($post->thumbnail)
@@ -113,18 +126,35 @@
 							</div> --}}
 						</div>
 						@endforeach
+						<div class="col-12">
+							{{$posts->links()}}
+						</div>
+					@else
+						<div class="alert alert-info" role="alert">
+							There are no posts
+						</div>
+					@endif
+					
+				</div>
+				<div class="col-lg-4">
+					<div class="mb-3">
+						<h4>Category</h4>
 					</div>
-					<div class="col-12">
-						{{$posts->links()}}
-					</div>
-				@else
-					<div class="alert alert-info" role="alert">
-						There are no posts
-					</div>
-				@endif
+					@foreach ($kategories as $kategori)
+						<small>
+							<a href="{{ route('categories.show', $kategori->slug) }}" class="btn btn-sm btn-secondary mb-1">{{ $kategori->name }}</a>
+						</small>
+					@endforeach
 
-
-			
+					<div class="mb-3">
+						<h4>Tag</h4>
+					</div>
+					@foreach ($taks as $tak) 
+						<small>
+							<a href="{{ route('tags.show', $tak->slug) }}" class="btn btn-sm btn-secondary mb-1">{{ $tak->name }}</a>
+						</small>
+					@endforeach
+				</div>
 			</div>
 		</div>
 @endsection

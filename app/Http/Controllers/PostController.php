@@ -28,14 +28,20 @@ class PostController extends Controller
 
         return view('posts.index',[
             // 'posts' => Post::paginate(3),
-            'posts' => Post::latest()->paginate(4),
+            // 'posts' => Post::latest()->paginate(4),
+            'kategories' => Category::get(),
+            'taks' => Tag::get(),
+            'posts' => Post::with('author', 'tags', 'category')->latest()->paginate(4),
         ]);
 
     }
 
     public function show(Post $post)
     {
-        return view('posts.show', compact('post'));
+    
+        $kategories = Category::with('author', 'tags', 'category')->where('category_id', $post->category_id)->latest()->limit(6);
+        $posts = Post::with('author', 'tags', 'category')->where('category_id', $post->category_id)->latest()->limit(6);
+        return view('posts.show', compact('post', 'posts', 'kategories'));
     }
 
     public function create()
